@@ -5,8 +5,8 @@ var initialize = () => {
 var con = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "smi-3-902",
-  database: "dbms_mini1"
+  password: "arvind@1234",
+  database: "MiniProject"
 });
 
 con.connect(function(err) {
