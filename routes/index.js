@@ -129,15 +129,13 @@ router.post('/add-element/artwork', [
   .trim(),
   check('price')
   .isDecimal({ min:1 })
-  .withMessage('Age is required')
+  .withMessage('Price is required')
   .trim(),
   check('artistId')
   .isDecimal({ min:1 })
-  .withMessage('Age is required')
+  .withMessage('ID is required')
   .trim(),
   check('custId')
-  .isDecimal({ min:1 })
-  .withMessage('Age is required')
   .trim(),
   check('artStyle')
   .isLength({ min: 1 })
