@@ -1,5 +1,8 @@
-const express = require('express');
-const router = express.Router();
+
+const express = require('express')
+const router = express.Router()
+const { check, validationResult } = require('express-validator/check')
+const { matchedData } = require('express-validator/filter')
 
 router.get('/', (req, res) => {
   res.render('home', {
@@ -34,9 +37,32 @@ router.get('/add-element', (req, res) => {
 
 router.get('/add-element/artwork', (req, res) => {
   res.render('add-artwork', {
-    pageTitle: 'Add New Artwork'
+    pageTitle: 'Add New Artwork',
+    data: {},
+    errors: {}
   });
 });
+
+router.post('/contact', [
+  check('message')
+    .isLength({ min: 1 })
+    .withMessage('Message is required')
+    .trim(),
+  check('email')
+    .isEmail()
+    .withMessage('That email doesn‘t look right')
+    .trim()
+    .normalizeEmail()
+], (req, res) => {
+  const errors = validationResult(req)
+  res.render('contact', {
+    data: req.body,
+    errors: errors.mapped()
+  })
+
+  const data = matchedData(req)
+  console.log('Sanitized:', data)
+})
 
 router.get('/add-element/artist', (req, res) => {
   res.render('add-artist', {
