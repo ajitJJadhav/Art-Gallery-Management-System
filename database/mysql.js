@@ -14,21 +14,29 @@ con.connect(function(err) {
   console.log("Database Connected!");
 });
 
-  return con;
 };
 
-var queryResult = (con,query) => {
+var queryResult = (query) => {
 
-con.connect(function(err) {
-  if (err) throw err;
-  con.query(query, function (err, result, fields) {
-    if (err) throw err;
+  var con = mysql.createConnection({
+    host: "localhost",
+    user: "root",
+    password: "smi-3-902",
+    database: "dbms_mini1"
   });
-});
 
-  return result;
-};
+  con.connect(function(err) {
+    if (err) throw err;
+    con.query(query, function (err, result, fields) {
+      if (err) throw err;
+      console.log(result);
+      return result;
+    });
+  });
+
+}
 
 module.exports = {
-  initialize
+  initialize,
+  queryResult
 };

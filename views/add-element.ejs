@@ -5,7 +5,7 @@
     <title>Some Website</title>
   </head>
   <body>
-    {{> header}}
+    <% include partials/header.ejs %>
 
     <p>Some text here</p>
 
@@ -14,6 +14,6 @@
     <p><a href="/add-element/artist"> Add Artist </a></p>
     <p><a href="/add-element/customer"> Add Customer </a></p>
 
-    {{> footer}}
+    <% include partials/footer.ejs %>
   </body>
 </html>

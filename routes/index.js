@@ -2,50 +2,50 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  res.render('home.hbs', {
+  res.render('home', {
     pageTitle: 'Home Page',
     welcomeMessage: 'Welcome to my website'
   });
 });
 
 router.get('/artists', (req, res) => {
-  res.render('artists.hbs', {
+  res.render('artists', {
     pageTitle: 'View Artists'
   });
 });
 
 router.get('/artworks', (req, res) => {
-  res.render('artworks.hbs', {
+  res.render('artworks', {
     pageTitle: 'View Art-works'
   });
 });
 
 router.get('/customers', (req, res) => {
-  res.render('customers.hbs', {
+  res.render('customers', {
     pageTitle: 'View customers'
   });
 });
 
 router.get('/add-element', (req, res) => {
-  res.render('add-element.hbs', {
+  res.render('add-element', {
     pageTitle: 'Adding elements Page'
   });
 });
 
 router.get('/add-element/artwork', (req, res) => {
-  res.render('add-artwork.hbs', {
+  res.render('add-artwork', {
     pageTitle: 'Add New Artwork'
   });
 });
 
 router.get('/add-element/artist', (req, res) => {
-  res.render('add-artist.hbs', {
+  res.render('add-artist', {
     pageTitle: 'Add New Artist'
   });
 });
 
 router.get('/add-element/customer', (req, res) => {
-  res.render('add-customer.hbs', {
+  res.render('add-customer', {
     pageTitle: 'Add New Customer'
   });
 });
