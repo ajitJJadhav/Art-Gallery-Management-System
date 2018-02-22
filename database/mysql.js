@@ -14,17 +14,19 @@ con.connect(function(err) {
   console.log("Database Connected!");
 });
 
+  return con;
 };
 
-var queryResult = () => {
+var queryResult = (con,query) => {
 
 con.connect(function(err) {
   if (err) throw err;
-  con.query("SELECT * FROM customers", function (err, result, fields) {
+  con.query(query, function (err, result, fields) {
     if (err) throw err;
   });
 });
 
+  return result;
 };
 
 module.exports = {

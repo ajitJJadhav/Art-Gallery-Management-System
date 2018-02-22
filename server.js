@@ -6,7 +6,7 @@ const routes = require('./routes/index');
 
 var app = express();
 
-mysql.initialize();
+var con = mysql.initialize();
 
 hbs.registerPartials(__dirname + '/views/partials')
 app.set('view engine', 'hbs');
