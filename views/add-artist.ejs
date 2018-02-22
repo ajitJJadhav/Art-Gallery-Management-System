@@ -10,7 +10,59 @@
     <p>Artist form</p>
 
 
+    <div class="form-header">
+  <% if (Object.keys(errors).length === 0) { %>
+    <h2>Send us a message</h2>
+  <% } else { %>
+    <h2 class="errors-heading">Oops, please correct the following:</h2>
+    <ul class="errors-list">
+      <% Object.values(errors).forEach(error => { %>
+        <li><%= error.msg %></li>
+      <% }) %>
+    </ul>
+  <% } %>
+</div>
 
+<form method="post" action="/add-element/artist" novalidate>
+  <div class="form-field <%= errors.name ? 'form-field-invalid' : '' %>">
+    <label for="name">Name</label>
+    <textarea class="input" id="name" name="name" rows="1" autofocus><%= data.name %></textarea>
+    <% if (errors.name) { %>
+      <div class="error"><%= errors.name.msg %></div>
+    <% } %>
+  </div>
+  <div class="form-field <%= errors.birthPlace ? 'form-field-invalid' : '' %>">
+    <label for="birthPlace">birthPlace</label>
+    <textarea class="input" id="birthPlace" name="birthPlace" rows="1" autofocus><%= data.birthPlace %></textarea>
+    <% if (errors.birthPlace) { %>
+      <div class="error"><%= errors.birthPlace.msg %></div>
+    <% } %>
+  </div>
+  <div class="form-field <%= errors.age ? 'form-field-invalid' : '' %>">
+    <label for="age">age</label>
+    <input class="input" id="age" name="age" type="number" value="<%= data.age %>" />
+    <% if (errors.age) { %>
+      <div class="error"><%= errors.age.msg %></div>
+    <% } %>
+  </div>
+  <div class="form-field <%= errors.artStyle ? 'form-field-invalid' : '' %>">
+    <label for="artStyle">artStyle</label>
+    <textarea class="input" id="artStyle" name="artStyle" rows="1" autofocus><%= data.artStyle %></textarea>
+    <% if (errors.artStyle) { %>
+      <div class="error"><%= errors.artStyle.msg %></div>
+    <% } %>
+  </div>
+  <div class="form-field <%= errors.id ? 'form-field-invalid' : '' %>">
+    <label for="id">id</label>
+    <input class="input" id="id" name="id" type="number" value="<%= data.id %>" />
+    <% if (errors.id) { %>
+      <div class="error"><%= errors.id.msg %></div>
+    <% } %>
+  </div>
+  <div class="form-actions">
+    <button class="btn" type="submit">Send</button>
+  </div>
+</form>
 
 
 
