@@ -9,6 +9,40 @@
 
     <p>Some text here</p>
 
+    <div class="form-header">
+  <% if (Object.keys(errors).length === 0) { %>
+    <h2>Send us a message</h2>
+  <% } else { %>
+    <h2 class="errors-heading">Oops, please correct the following:</h2>
+    <ul class="errors-list">
+      <% Object.values(errors).forEach(error => { %>
+        <li><%= error.msg %></li>
+      <% }) %>
+    </ul>
+  <% } %>
+</div>
+
+<form method="post" action="artists" novalidate>
+  <div class="form-field <%= errors.name ? 'form-field-invalid' : '' %>">
+    <label for="name">Name</label>
+    <textarea class="input" id="name" name="name" rows="1" autofocus><%= data.name %></textarea>
+    <% if (errors.name) { %>
+      <div class="error"><%= errors.name.msg %></div>
+    <% } %>
+  </div>
+  <div class="form-field <%= errors.artStyle ? 'form-field-invalid' : '' %>">
+    <label for="artStyle">artStyle</label>
+    <textarea class="input" id="artStyle" name="artStyle" rows="1" autofocus><%= data.artStyle %></textarea>
+    <% if (errors.artStyle) { %>
+      <div class="error"><%= errors.artStyle.msg %></div>
+    <% } %>
+  </div>
+  <div class="form-actions">
+    <button class="btn" type="submit">Send</button>
+  </div>
+</form>
+
+
     <% include partials/footer.ejs %>
   </body>
 </html>

@@ -9,6 +9,75 @@
 
     <p>Artwork form</p>
 
+    <div class="form-header">
+  <% if (Object.keys(errors).length === 0) { %>
+    <h2>Send us a message</h2>
+  <% } else { %>
+    <h2 class="errors-heading">Oops, please correct the following:</h2>
+    <ul class="errors-list">
+      <% Object.values(errors).forEach(error => { %>
+        <li><%= error.msg %></li>
+      <% }) %>
+    </ul>
+  <% } %>
+</div>
+
+<form method="post" action="/add-element/artwork" novalidate>
+  <div class="form-field <%= errors.id ? 'form-field-invalid' : '' %>">
+    <label for="id">id</label>
+    <input class="input" id="id" name="id" type="number" value="<%= data.id %>" />
+    <% if (errors.id) { %>
+      <div class="error"><%= errors.id.msg %></div>
+      <% } %>
+  </div>
+  <div class="form-field <%= errors.year ? 'form-field-invalid' : '' %>">
+    <label for="year">year</label>
+    <input class="input" id="year" name="year" type="number" value="<%= data.year %>" />
+    <% if (errors.year) { %>
+      <div class="error"><%= errors.year.msg %></div>
+      <% } %>
+  </div>
+  <div class="form-field <%= errors.name ? 'form-field-invalid' : '' %>">
+    <label for="name">Name</label>
+    <textarea class="input" id="name" name="name" rows="1" autofocus><%= data.name %></textarea>
+    <% if (errors.name) { %>
+      <div class="error"><%= errors.name.msg %></div>
+    <% } %>
+  </div>
+  <div class="form-field <%= errors.artStyle ? 'form-field-invalid' : '' %>">
+    <label for="artStyle">artStyle</label>
+    <textarea class="input" id="artStyle" name="artStyle" rows="1" autofocus><%= data.artStyle %></textarea>
+    <% if (errors.artStyle) { %>
+      <div class="error"><%= errors.artStyle.msg %></div>
+      <% } %>
+  </div>
+  <div class="form-field <%= errors.price ? 'form-field-invalid' : '' %>">
+    <label for="price">price</label>
+    <input class="input" id="price" name="price" type="number" value="<%= data.price %>" />
+    <% if (errors.price) { %>
+      <div class="error"><%= errors.price.msg %></div>
+    <% } %>
+  </div>
+  <div class="form-field <%= errors.artistId ? 'form-field-invalid' : '' %>">
+    <label for="artistId">artistId</label>
+    <input class="input" id="artistId" name="artistId" type="number" value="<%= data.artistId %>" />
+    <% if (errors.artistId) { %>
+      <div class="error"><%= errors.artistId.msg %></div>
+      <% } %>
+  </div>
+  <div class="form-field <%= errors.custId ? 'form-field-invalid' : '' %>">
+    <label for="custId">custId</label>
+    <input class="input" id="custId" name="custId" type="number" value="<%= data.custId %>" />
+    <% if (errors.custId) { %>
+      <div class="error"><%= errors.custId.msg %></div>
+      <% } %>
+  </div>
+  <div class="form-actions">
+    <button class="btn" type="submit">Send</button>
+  </div>
+</form>
+
+
     <% include partials/footer.ejs %>
   </body>
 </html>

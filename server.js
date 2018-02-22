@@ -22,6 +22,7 @@ const middlewares = [
 ]
 app.use(middlewares)
 
+
 app.use('/', routes);
 
 app.use((req, res, next) => {
