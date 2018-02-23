@@ -34,9 +34,22 @@ router.post('/artists', [
     errors: errors.mapped()
   })
 
-  const data = matchedData(req)
+    const data = matchedData(req)
+    var query;
     console.log('Sanitized:', data)
-    console.log(queryResult('show columns in Artist '))
+    if(data.name != '' && data.artStyle != ''){
+	query = `select * from Artist where name = "${data.name}" and artStyle = "${data.artStyle}"`
+    }
+    else if( data.artStyle == '' && data.name != ''){
+	query = `select * from Artist where name = "${data.name}"`
+    }
+    else if(data.artStyle != '' && data.name == ''){
+	query = `select * from Artist where artStyle = "${data.artStyle}"`
+    }
+    else{
+	query = `select * from Artist`
+    }
+    console.log(queryResult(query))
 })
 
 
@@ -90,8 +103,16 @@ router.post('/customers', [
     errors: errors.mapped()
   })
 
-  const data = matchedData(req)
-  console.log('Sanitized:', data)
+    const data = matchedData(req)
+    var query;
+    console.log('Sanitized:', data)
+    if(data.name != ''){
+	query = `select * from Customer where name = "${data.name}"  `
+    }
+    else{
+	query = `select * from Customer` 
+    }
+    console.log(queryResult(query));
 })
 
 
