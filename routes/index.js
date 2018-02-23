@@ -1,6 +1,7 @@
 
 const express = require('express')
 const router = express.Router()
+const {queryResult} = require('../database/mysql')
 const { check, validationResult } = require('express-validator/check')
 const { matchedData } = require('express-validator/filter')
 
@@ -33,7 +34,8 @@ router.post('/artists', [
   })
 
   const data = matchedData(req)
-  console.log('Sanitized:', data)
+    console.log('Sanitized:', data)
+    console.log(queryResult('show columns in Artist '))
 })
 
 
