@@ -18,7 +18,8 @@ app.set('view engine', 'ejs')
 const middlewares = [
   validator(),
   express.static(path.join(__dirname, 'public')),
-  bodyParser.urlencoded()
+  bodyParser.json(),
+  bodyParser.urlencoded({extended: true})
 ]
 app.use(middlewares)
 
