@@ -3,6 +3,7 @@ const express = require('express')
 const router = express.Router()
 const { check, validationResult } = require('express-validator/check')
 const { matchedData } = require('express-validator/filter')
+const mysql = require('../database/mysql');
 
 router.get('/', (req, res) => {
   res.render('home', {
@@ -152,6 +153,18 @@ router.post('/add-element/artwork', [
 
   const data = matchedData(req)
   console.log('Sanitized:', data)
+
+  if(errors.mapped())
+    {
+      result = mysql.queryResult(`INSERT INTO ArtWork VALUES (${data.id},${data.year},"${data.name}","${data.artStyle}",${data.price},${data.artistId},${data.custId})`)
+      console.log(result)
+
+      if (!result)
+      {
+
+      }
+
+    }
 })
 
 
@@ -194,6 +207,19 @@ router.post('/add-element/artist', [
 
   const data = matchedData(req)
   console.log('Sanitized:', data)
+
+  if(errors.mapped())
+    {
+      result = mysql.queryResult(`INSERT INTO Artist VALUES ("${data.name}","${data.birthPlace}",${data.age},"${data.artStyle}",${data.id})`)
+      console.log(result)
+
+      if (!result)
+      {
+
+      }
+
+    }
+
 })
 
 router.get('/add-element/customer', (req, res) => {
@@ -223,13 +249,25 @@ router.post('/add-element/customer', [
 
   const data = matchedData(req)
   console.log('Sanitized:', data)
+
+  if(errors.mapped())
+    {
+      result = mysql.queryResult(`INSERT INTO Customer VALUES (${data.id},"${data.name}",0)`)
+      console.log(result)
+
+      if (!result)
+      {
+
+      }
+
+    }
 })
 
 
 // /bad - send back json with errorMessage
 router.get('/bad', (req, res) => {
   res.send({
-    errorMessage: 'Unable to handle request'
+    errorMessage: 'Key constraints violated.Unable to handle request'
   });
 });
 
