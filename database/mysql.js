@@ -5,8 +5,8 @@ var initialize = () => {
 var con = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "arvind@1234",
-  database: "MiniProject"
+  password: "smi-3-902",
+  database: "dbms_mini1"
 });
 
 con.connect(function(err) {
@@ -21,8 +21,8 @@ var queryResult = (query) => {
   var con = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "arvind@1234",
-    database: "MiniProject"
+    password: "smi-3-902",
+    database: "dbms_mini1"
   });
 
   con.connect(function(err) {
