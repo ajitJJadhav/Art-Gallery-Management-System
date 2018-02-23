@@ -26,9 +26,9 @@ var queryResult = (query) => {
   });
 
   con.connect(function(err) {
-    if (err) throw err;
+    //if (err) return err;
     con.query(query, function (err, result, fields) {
-      if (err) throw err;
+      //if (err) return err;
        console.log(result);
       return result;
     });

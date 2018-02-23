@@ -163,7 +163,7 @@ router.post('/add-element/artwork', [
 
       if (!result)
       {
-
+        console.log('Key constraints violated');
       }
 
     }
@@ -217,7 +217,7 @@ router.post('/add-element/artist', [
 
       if (!result)
       {
-
+        console.log('Key constraints violated');
       }
 
     }
@@ -259,7 +259,7 @@ router.post('/add-element/customer', [
 
       if (!result)
       {
-
+        console.log('Key constraints violated');
       }
 
     }
