@@ -5,6 +5,19 @@ const {queryResult} = require('../database/mysql')
 const { check, validationResult } = require('express-validator/check')
 const { matchedData } = require('express-validator/filter')
 const mysql = require('../database/mysql');
+const expect = require('expect')
+
+
+function isEmpty(obj) {
+    for(var key in obj) {
+        if(obj.hasOwnProperty(key))
+            return false;
+    }
+    return true;
+}
+
+
+
 
 router.get('/', (req, res) => {
   res.render('home', {
@@ -110,18 +123,13 @@ router.post('/customers', [
 	query = `select * from Customer where name = "${data.name}"  `
     }
     else{
-	query = `select * from Customer` 
+	query = `select * from Customer`
     }
     console.log(queryResult(query));
 })
 
 
-// /bad - send back json with errorMessage
-router.get('/bad', (req, res) => {
-  res.send({
-    errorMessage: 'Unable to handle request'
-  });
-});
+
 
 
 router.get('/add-element', (req, res) => {
@@ -264,33 +272,49 @@ router.post('/add-element/customer', [
   .trim()
 ], (req, res) => {
   const errors = validationResult(req)
-  res.render('add-customer', {
-    pageTitle: 'Add New Artist',
-    data: req.body,
-    errors: errors.mapped()
-  })
 
   const data = matchedData(req)
   console.log('Sanitized:', data)
 
-  if(errors.mapped())
+  if(isEmpty(errors.mapped()))
     {
-      result = mysql.queryResult(`INSERT INTO Customer VALUES (${data.id},"${data.name}",0)`)
+      var result = mysql.queryResult(`INSERT INTO Customer VALUES (${data.id},"${data.name}",0)`)
       console.log(result)
+      console.log(result == undefined)
 
-      if (!result)
+      if (result == undefined)
       {
         console.log('Key constraints violated');
+        res.redirect('/bad')
       }
-
+      else {
+        res.redirect('/success');
+      }
     }
+
+  else {
+
+    res.render('add-customer', {
+      pageTitle: 'Add New Artist',
+      data: req.body,
+      errors: errors.mapped()
+    })
+  }
 })
+
+
 
 
 // /bad - send back json with errorMessage
 router.get('/bad', (req, res) => {
   res.send({
     errorMessage: 'Key constraints violated.Unable to handle request'
+  });
+});
+
+router.get('/success', (req, res) => {
+  res.send({
+    Success: 'Data inserted successfully!!'
   });
 });
 
