@@ -22,34 +22,20 @@
   <% } %>
 </div>
 
-<form method="post" action="artworks" novalidate>
-  <div class="form-field <%= errors.name ? 'form-field-invalid' : '' %>">
-    <label for="name">Name</label>
-    <textarea class="input" id="name" name="name" rows="1" autofocus><%= data.name %></textarea>
-    <% if (errors.name) { %>
-      <div class="error"><%= errors.name.msg %></div>
-    <% } %>
-  </div>
-  <div class="form-field <%= errors.artStyle ? 'form-field-invalid' : '' %>">
-    <label for="artStyle">artStyle</label>
-    <textarea class="input" id="artStyle" name="artStyle" rows="1" autofocus><%= data.artStyle %></textarea>
-    <% if (errors.artStyle) { %>
-      <div class="error"><%= errors.artStyle.msg %></div>
+<form method="post" action="/transaction" novalidate>
+  <div class="form-field <%= errors.custId ? 'form-field-invalid' : '' %>">
+    <label for="custId">custId</label>
+    <input class="input" id="custId" name="custId" type="number" value="<%= data.custId %>" />
+    <% if (errors.custId) { %>
+      <div class="error"><%= errors.custId.msg %></div>
       <% } %>
   </div>
-  <div class="form-field <%= errors.artistName ? 'form-field-invalid' : '' %>">
-    <label for="artistName">artistName</label>
-    <textarea class="input" id="artistName" name="artistName" rows="1" autofocus><%= data.artistName %></textarea>
-    <% if (errors.artistName) { %>
-      <div class="error"><%= errors.artistName.msg %></div>
-    <% } %>
-  </div>
-  <div class="form-field <%= errors.custName ? 'form-field-invalid' : '' %>">
-    <label for="custName">custName</label>
-    <textarea class="input" id="custName" name="custName" rows="1" autofocus><%= data.custName %></textarea>
-    <% if (errors.custName) { %>
-      <div class="error"><%= errors.custName.msg %></div>
-    <% } %>
+  <div class="form-field <%= errors.artistId ? 'form-field-invalid' : '' %>">
+    <label for="artistId">artistId</label>
+    <input class="input" id="artistId" name="artistId" type="number" value="<%= data.artistId %>" />
+    <% if (errors.artistId) { %>
+      <div class="error"><%= errors.artistId.msg %></div>
+      <% } %>
   </div>
   <div class="form-actions">
     <button class="btn" type="submit">Send</button>

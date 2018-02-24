@@ -302,6 +302,55 @@ router.post('/add-element/customer', [
   }
 })
 
+router.get('/transaction', (req, res) => {
+  res.render('transaction', {
+    pageTitle: 'Add New transaction',
+    data: {},
+    errors: {}
+  });
+});
+
+router.post('/transaction', [
+  check('custId')
+  .isDecimal({ min:1 })
+  .withMessage('That ID doesn‘t look right')
+  .trim(),
+  check('artistId')
+  .isDecimal({ min:1 })
+  .withMessage('That ID doesn‘t look right')
+  .trim()
+], (req, res) => {
+  const errors = validationResult(req)
+
+  const data = matchedData(req)
+  console.log('Sanitized:', data)
+
+  if(isEmpty(errors.mapped()))
+    {
+      var result = mysql.queryResult(``)
+      console.log(result)
+      console.log(result == undefined)
+
+      if (result == undefined)
+      {
+        console.log('Key constraints violated');
+        res.redirect('/bad')
+      }
+      else {
+        res.redirect('/success');
+      }
+    }
+
+  else {
+
+    res.render('transaction', {
+      pageTitle: 'Add New Transaction',
+      data: req.body,
+      errors: errors.mapped()
+    })
+  }
+})
+
 
 
 
