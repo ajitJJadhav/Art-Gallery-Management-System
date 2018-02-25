@@ -517,14 +517,29 @@ router.get('/info', (req,res) => {
       res.redirect('/bad')
     }
     else {
-      res.redirect('/success');
+      // res.redirect('/success');
+      res.render('info',{
+        pageTitle: 'General Information',
+        result: result,
+      })
     }
   }
 
-  var query = sql.format("")
-  var result = mysql.queryResult(query,callback)
-
-
+  var result = []
+  var highestSpendingArtist = `select * from Artwork where owner in (select custid from Customer where moneyspent = (select max(moneyspent) from Customer));`
+  var noPaintingCustomers = `select name from Customer where custid not in (select distinct owner from Artwork);`
+  var customersWithAllStyles = `select name from Customer where custid in (select owner from Artwork group by owner having count(distinct arttype) = (select count(distinct arttype) from Artwork));`  
+  var customerWithThreePaintingsAbovePrice = `select * from Artwork where price > 350 group by owner having count(*) >= 3 ;`
+  var artworksInCategoryWithHighestCount = `select * from Artwork where Artwork.arttype = (select Artwork.arttype from Artwork group by Artwork.arttype order by count(*) desc limit 1) ;`
+  var artworkOfArtStyleWithHighestAvgPrice = `select * from Artwork where Artwork.arttype = (select Artwork.arttype from Artwork group by Artwork.arttype order by avg(Artwork.price) desc limit 1);`
+  
+  
+  result.push(mysql.queryResult(highestSpendingArtist, callback));
+  result.push(mysql.queryResult(noPaintingCustomers, callback));
+  result.push(mysql.queryResult(customersWithAllStyles, callback));
+  result.push(mysql.queryResult(customerWithThreePaintingsAbovePrice, callback));
+  result.push(mysql.queryResult(artworksInCategoryWithHighestCount, callback));
+  result.push(mysql.queryResult(artworkOfArtStyleWithHighestAvgPrice, callback));
 
 
 })

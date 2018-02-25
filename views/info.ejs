@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Some Website</title>
+    </head>
+    <body>
+        <% include partials/header.ejs %>
+        <p>ENTER WHAT THE QUERY IS!!!!!!</p>
+            <table class="table">
+                <tr>
+                    <th>Art Work Title</th>
+                    <th>Art Work ID</th>
+                    <th>Year Created</th>
+                    <th>Art Style</th>
+                    <th>Price</th>
+                </tr>
+                <% Object.values(result).forEach(res => { %>
+                    <tr>
+                        <td><%= res.title %></td>
+                        <td><%= res.artworkid %></td>
+                        <td><%= res.year %></td>
+                        <td><%= res.arttype %></td>
+                        <td><%= res.price %></td>
+                    </tr>
+                <% }) %>    
+            </table>
+        <% include partials/footer.ejs %>
+    </body>
+</html>
