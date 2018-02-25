@@ -87,7 +87,7 @@ router.post('/artists', [
         }
       }
       var result = mysql.queryResult(query,callback)
-      
+
 
     }
 
@@ -160,7 +160,7 @@ router.post('/artworks', [
         }
       }
       var result = mysql.queryResult(query,callback)
-      
+
     }
 
   else{
@@ -471,22 +471,6 @@ router.post('/transaction', [
   const data = matchedData(req)
   console.log('Sanitized:', data)
 
-  if(isEmpty(errors.mapped()))
-    {
-      var result = mysql.queryResult(`update ArtWork set owner=${data.custId} where artworkid=${data.artistId}`)
-      console.log(result)
-      console.log(result == undefined)
-
-      if (result == undefined)
-      {
-        console.log('Key constraints violated');
-        res.redirect('/bad')
-      }
-      else {
-        res.redirect('/success');
-      }
-    }
-
     if(isEmpty(errors.mapped()))
       {
         var callback = (result) =>
@@ -518,7 +502,32 @@ router.post('/transaction', [
   }
 })
 
+router.get('/info', (req,res) => {
 
+
+  var callback = (result) =>
+  {
+
+    console.log(`returned : ${JSON.stringify(result,undefined,2)}`)
+    // console.log(result == undefined)
+
+    if (result == undefined)
+    {
+      console.log('Key constraints violated');
+      res.redirect('/bad')
+    }
+    else {
+      res.redirect('/success');
+    }
+  }
+
+  var query = sql.format("")
+  var result = mysql.queryResult(query,callback)
+
+
+
+
+})
 
 
 // /bad - send back json with errorMessage
