@@ -136,7 +136,7 @@ router.post('/artworks', [
     data.artStyle = null;
   }
   var arr = [data.name,data.name,data.artStyle,data.artStyle,data.artistName,data.artistName];
-  var query = sql.format("select title,artworkid,year,arttype,price,Artist.name as aname,Customer.name as owner from Artwork,Artist,Customer where (? is null or title = ?) and (owner = Customer.custid) and (Artwork.artistid = Artist.artistid) and (? is null or arttype = ?) and (? is null or Artwork.artistid in (select Artist.artistid from Artist where name = ?))",arr)
+  var query = sql.format("select title,artworkid,year,arttype,price,Artist.name as aname,Customer.name as owner from ArtWork,Artist,Customer where (? is null or title = ?) and (owner = Customer.custid) and (ArtWork.artistid = Artist.artistid) and (? is null or arttype = ?) and (? is null or ArtWork.artistid in (select Artist.artistid from Artist where name = ?))",arr)
   if(isEmpty(errors.mapped()))
     {
       var callback = (result) =>
@@ -251,7 +251,7 @@ router.get('/add-element', (req, res) => {
 
 router.get('/add-element/artwork', (req, res) => {
   res.render('add-artwork', {
-    pageTitle: 'Add New Artwork',
+    pageTitle: 'Add New ArtWork',
     data: {},
     errors: {}
   });
@@ -319,7 +319,7 @@ router.post('/add-element/artwork', [
   else{
 
     res.render('add-artwork', {
-      pageTitle: 'Add New Artwork',
+      pageTitle: 'Add New ArtWork',
       data: req.body,
       errors: errors.mapped()
     })
@@ -518,30 +518,31 @@ router.get('/info', (req,res) => {
     }
     else {
       // res.redirect('/success');
-      res.render('info',{
-        pageTitle: 'General Information',
-        result: result,
-      })
+      // res.render('info',{
+      //   pageTitle: 'General Information',
+      //   result: result,
+      // })
+      res.json(result)
     }
   }
 
   var result = []
-  var highestSpendingArtist = `select * from Artwork where owner in (select custid from Customer where moneyspent = (select max(moneyspent) from Customer));`
-  var noPaintingCustomers = `select name from Customer where custid not in (select distinct owner from Artwork);`
-  var customersWithAllStyles = `select name from Customer where custid in (select owner from Artwork group by owner having count(distinct arttype) = (select count(distinct arttype) from Artwork));`  
-  var customerWithThreePaintingsAbovePrice = `select * from Artwork where price > 350 group by owner having count(*) >= 3 ;`
-  var artworksInCategoryWithHighestCount = `select * from Artwork where Artwork.arttype = (select Artwork.arttype from Artwork group by Artwork.arttype order by count(*) desc limit 1) ;`
-  var artworkOfArtStyleWithHighestAvgPrice = `select * from Artwork where Artwork.arttype = (select Artwork.arttype from Artwork group by Artwork.arttype order by avg(Artwork.price) desc limit 1);`
-  
-  
-  result.push(mysql.queryResult(highestSpendingArtist, callback));
-  result.push(mysql.queryResult(noPaintingCustomers, callback));
-  result.push(mysql.queryResult(customersWithAllStyles, callback));
-  result.push(mysql.queryResult(customerWithThreePaintingsAbovePrice, callback));
-  result.push(mysql.queryResult(artworksInCategoryWithHighestCount, callback));
-  result.push(mysql.queryResult(artworkOfArtStyleWithHighestAvgPrice, callback));
+  var highestSpendingArtist = `select * from ArtWork where owner in (select custid from Customer where moneyspent = (select max(moneyspent) from Customer))`
+  var noPaintingCustomers = `select name from Customer where custid not in (select distinct owner from ArtWork)`
+  var customersWithAllStyles = `select name from Customer where custid in (select owner from ArtWork group by owner having count(distinct arttype) = (select count(distinct arttype) from ArtWork))`
+  var customerWithThreePaintingsAbovePrice = `select * from ArtWork where price > 350 group by owner having count(*) >= 3`
+  var artworksInCategoryWithHighestCount = `select * from ArtWork where ArtWork.arttype = (select ArtWork.arttype from ArtWork group by ArtWork.arttype order by count(*) desc limit 1)`
+  var artworkOfArtStyleWithHighestAvgPrice = `select * from ArtWork where ArtWork.arttype = (select ArtWork.arttype from ArtWork group by ArtWork.arttype order by avg(ArtWork.price) desc limit 1)`
 
 
+  result.push(highestSpendingArtist);
+  result.push(noPaintingCustomers);
+  result.push(customersWithAllStyles);
+  result.push(customerWithThreePaintingsAbovePrice);
+  result.push(artworksInCategoryWithHighestCount);
+  result.push(artworkOfArtStyleWithHighestAvgPrice);
+
+  mysql.queryResultMultiple(result,callback)
 })
 
 
