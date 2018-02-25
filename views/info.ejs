@@ -6,7 +6,7 @@
     </head>
     <body>
         <% include partials/header.ejs %>
-        <p>ENTER WHAT THE QUERY IS!!!!!!</p>
+        <h3>Art Works owned by Highest Spending Customers </h3>
             <table class="table">
                 <tr>
                     <th>Art Work Title</th>
@@ -15,7 +15,7 @@
                     <th>Art Style</th>
                     <th>Price</th>
                 </tr>
-                <% Object.values(result).forEach(res => { %>
+                <% Object.values(result[0]).forEach(res => { %>
                     <tr>
                         <td><%= res.title %></td>
                         <td><%= res.artworkid %></td>
@@ -25,6 +25,71 @@
                     </tr>
                 <% }) %>    
             </table>
+            <hr><hr>
+            <br>
+        
+        <h3>Customers who don't own any art works</h3>
+            <% Object.values(result[1]).forEach(res => { %>
+                <h4><%= res.name %></h4><br><br>
+            <% }) %>
+        <hr><hr><br>
+        
+        
+        <h3>Customers who have art works of all Styles</h3>
+        <% Object.values(result[2]).forEach(res => { %>
+            <h4><%= res.name %></h4><br><br>
+        <% }) %>
+        <hr/><hr/><br>
+
+        <h3>Customers who have 3 or more art works with price above 350 </h3>
+        <% Object.values(result[3]).forEach(res => { %>
+            <h4><%= res.name %></h4><br><br>
+        <% }) %>
+        <hr><hr><br>
+
+        <h3>Art Works of the Category with Highest Number of Artworks</h3>
+        <table class="table">
+            <tr>
+                <th>Art Work Title</th>
+                <th>Art Work ID</th>
+                <th>Year Created</th>
+                <th>Art Style</th>
+                <th>Price</th>
+            </tr>
+            <% Object.values(result[4]).forEach(res => { %>
+                <tr>
+                    <td><%= res.title %></td>
+                    <td><%= res.artworkid %></td>
+                    <td><%= res.year %></td>
+                    <td><%= res.arttype %></td>
+                    <td><%= res.price %></td>
+                </tr>
+            <% }) %>    
+        </table>
+        <hr><hr>
+        <br>
+
+        <h3>Artworks of Art Style with Highest Average Artwork Price</h3>
+        <table class="table">
+            <tr>
+                <th>Art Work Title</th>
+                <th>Art Work ID</th>
+                <th>Year Created</th>
+                <th>Art Style</th>
+                <th>Price</th>
+            </tr>
+            <% Object.values(result[5]).forEach(res => { %>
+                <tr>
+                    <td><%= res.title %></td>
+                    <td><%= res.artworkid %></td>
+                    <td><%= res.year %></td>
+                    <td><%= res.arttype %></td>
+                    <td><%= res.price %></td>
+                </tr>
+            <% }) %>    
+        </table>
+        <hr><hr>
+        <br>
         <% include partials/footer.ejs %>
     </body>
 </html>

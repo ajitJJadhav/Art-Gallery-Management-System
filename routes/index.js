@@ -518,24 +518,24 @@ router.get('/info', (req,res) => {
     }
     else {
       // res.redirect('/success');
-      // res.render('info',{
-      //   pageTitle: 'General Information',
-      //   result: result,
-      // })
-      res.json(result)
+       res.render('info',{
+         pageTitle: 'General Information',
+         result: result
+       })
+      //res.json(result)
     }
   }
 
   var result = []
-  var highestSpendingArtist = `select * from ArtWork where owner in (select custid from Customer where moneyspent = (select max(moneyspent) from Customer))`
+  var highestSpendingCustomer = `select * from ArtWork where owner in (select custid from Customer where moneyspent = (select max(moneyspent) from Customer))`
   var noPaintingCustomers = `select name from Customer where custid not in (select distinct owner from ArtWork)`
   var customersWithAllStyles = `select name from Customer where custid in (select owner from ArtWork group by owner having count(distinct arttype) = (select count(distinct arttype) from ArtWork))`
-  var customerWithThreePaintingsAbovePrice = `select * from ArtWork where price > 350 group by owner having count(*) >= 3`
+  var customerWithThreePaintingsAbovePrice = ` select name from Customer where custid in (select owner from ArtWork where price > 350 group by owner having count(*) >= 3);`
   var artworksInCategoryWithHighestCount = `select * from ArtWork where ArtWork.arttype = (select ArtWork.arttype from ArtWork group by ArtWork.arttype order by count(*) desc limit 1)`
   var artworkOfArtStyleWithHighestAvgPrice = `select * from ArtWork where ArtWork.arttype = (select ArtWork.arttype from ArtWork group by ArtWork.arttype order by avg(ArtWork.price) desc limit 1)`
 
 
-  result.push(highestSpendingArtist);
+  result.push(highestSpendingCustomer);
   result.push(noPaintingCustomers);
   result.push(customersWithAllStyles);
   result.push(customerWithThreePaintingsAbovePrice);
