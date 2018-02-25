@@ -101,8 +101,6 @@ router.post('/artworks', [
   .trim(),
   check('artistName')
   .trim(),
-  check('custName')
-  .trim(),
   check('artStyle')
   .trim()
 
@@ -129,7 +127,6 @@ router.post('/artworks', [
         }
       }
       var result = mysql.queryResult(query,callback)
-
     }
 
   else{
@@ -237,10 +234,21 @@ router.post('/add-element/artwork', [
   check('artistId')
   .isDecimal({ min:1 })
   .withMessage('ID is required')
+  .trim(),
+  check('custId')
+  .trim(),
+  check('artStyle')
+  .isLength({ min: 1 })
+  .withMessage('Artstyle is required')
   .trim()
+
 ], (req, res) => {
   const errors = validationResult(req)
   const data = matchedData(req)
+  if (data.custId === '')
+  {
+    data.custId=0
+  }
   console.log('Sanitized:', data)
 
   if(isEmpty(errors.mapped()))
@@ -260,7 +268,8 @@ router.post('/add-element/artwork', [
           res.redirect('/success');
         }
       }
-      var result = mysql.queryResult(query,callback)
+      console.log(data.custId)
+      var result = mysql.queryResult(`INSERT INTO ArtWork VALUES (${data.id},${data.year},"${data.name}","${data.artStyle}",${data.price},${data.artistId},${data.custId})`,callback)
 
     }
 
@@ -327,7 +336,7 @@ router.post('/add-element/artist', [
           res.redirect('/success');
         }
       }
-      var result = mysql.queryResult(`INSERT INTO Customer VALUES (${data.id},"${data.name}",0)`,callback)
+      var result = mysql.queryResult(`INSERT INTO Artist VALUES ("${data.name}","${data.birthPlace}",${data.age},"${data.artStyle}",${data.id})`,callback)
 
     }
 
