@@ -16,7 +16,7 @@ con.connect(function(err) {
 
 };
 
-var queryResult = (query) => {
+var queryResult = (query,callback) => {
 
   var con = mysql.createConnection({
     host: "localhost",
@@ -27,10 +27,10 @@ var queryResult = (query) => {
 
   con.connect(function(err) {
     //if (err) return err;
-    con.query(query, function (err, result, fields) {
+    result = con.query(query, function (err, result, fields) {
       //if (err) return err;
       console.log(result)
-      return result;
+      callback(result);
     });
   });
 

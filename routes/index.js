@@ -16,9 +16,6 @@ function isEmpty(obj) {
     return true;
 }
 
-
-
-
 router.get('/', (req, res) => {
   res.render('home', {
     pageTitle: 'Home Page',
@@ -41,28 +38,53 @@ router.post('/artists', [
   .trim()
 ], (req, res) => {
   const errors = validationResult(req)
-  res.render('artists', {
-    pageTitle: 'View Artists',
-    data: req.body,
-    errors: errors.mapped()
-  })
 
-    const data = matchedData(req)
-    var query;
-    console.log('Sanitized:', data)
-    if(data.name != '' && data.artStyle != ''){
-	query = `select * from Artist where name = "${data.name}" and artStyle = "${data.artStyle}"`
+  const data = matchedData(req)
+  var query;
+  console.log('Sanitized:', data)
+  if(data.name != '' && data.artStyle != ''){
+query = `select * from Artist where name = "${data.name}" and artStyle = "${data.artStyle}"`
+  }
+  else if( data.artStyle == '' && data.name != ''){
+query = `select * from Artist where name = "${data.name}"`
+  }
+  else if(data.artStyle != '' && data.name == ''){
+query = `select * from Artist where artStyle = "${data.artStyle}"`
+  }
+  else{
+query = `select * from Artist`
+  }
+
+  if(isEmpty(errors.mapped()))
+    {
+      var callback = (result) =>
+      {
+
+        console.log(`returned : ${JSON.stringify(result,undefined,2)}`)
+        // console.log(result == undefined)
+
+        if (result == undefined)
+        {
+          console.log('Key constraints violated');
+          res.redirect('/bad')
+        }
+        else {
+          res.redirect('/success');
+        }
+      }
+      var result = mysql.queryResult(query,callback)
+
     }
-    else if( data.artStyle == '' && data.name != ''){
-	query = `select * from Artist where name = "${data.name}"`
-    }
-    else if(data.artStyle != '' && data.name == ''){
-	query = `select * from Artist where artStyle = "${data.artStyle}"`
-    }
-    else{
-	query = `select * from Artist`
-    }
-    console.log(queryResult(query))
+
+  else{
+    res.render('artists', {
+      pageTitle: 'View Artists',
+      data: req.body,
+      errors: errors.mapped()
+    })
+
+  }
+
 })
 
 
@@ -86,14 +108,39 @@ router.post('/artworks', [
 
 ], (req, res) => {
   const errors = validationResult(req)
-  res.render('artworks', {
-    pageTitle: 'View Art Works',
-    data: req.body,
-    errors: errors.mapped()
-  })
-
   const data = matchedData(req)
   console.log('Sanitized:', data)
+
+  if(isEmpty(errors.mapped()))
+    {
+      var callback = (result) =>
+      {
+
+        console.log(`returned : ${JSON.stringify(result,undefined,2)}`)
+        // console.log(result == undefined)
+
+        if (result == undefined)
+        {
+          console.log('Key constraints violated');
+          res.redirect('/bad')
+        }
+        else {
+          res.redirect('/success');
+        }
+      }
+      var result = mysql.queryResult(query,callback)
+
+    }
+
+  else{
+    res.render('artworks', {
+      pageTitle: 'View Art Works',
+      data: req.body,
+      errors: errors.mapped()
+    })
+
+  }
+
 })
 
 router.get('/customers', (req, res) => {
@@ -110,22 +157,46 @@ router.post('/customers', [
   .trim()
 ], (req, res) => {
   const errors = validationResult(req)
-  res.render('customers', {
-    pageTitle: 'View Customers',
-    data: req.body,
-    errors: errors.mapped()
-  })
+  const data = matchedData(req)
+  var query;
+  console.log('Sanitized:', data)
+  if(data.name != ''){
+    query = `select * from Customer where name = "${data.name}"  `
+  }
+  else{
+    query = `select * from Customer`
+  }
 
-    const data = matchedData(req)
-    var query;
-    console.log('Sanitized:', data)
-    if(data.name != ''){
-	query = `select * from Customer where name = "${data.name}"  `
+  if(isEmpty(errors.mapped()))
+    {
+      var callback = (result) =>
+      {
+
+        console.log(`returned : ${JSON.stringify(result,undefined,2)}`)
+        // console.log(result == undefined)
+
+        if (result == undefined)
+        {
+          console.log('Key constraints violated');
+          res.redirect('/bad')
+        }
+        else {
+          res.redirect('/success');
+        }
+      }
+      var result = mysql.queryResult(query,callback)
+
     }
-    else{
-	query = `select * from Customer`
-    }
-    console.log(queryResult(query));
+
+  else{
+
+    res.render('customers', {
+      pageTitle: 'View Customers',
+      data: req.body,
+      errors: errors.mapped()
+    })
+  }
+
 })
 
 
@@ -176,26 +247,39 @@ router.post('/add-element/artwork', [
 
 ], (req, res) => {
   const errors = validationResult(req)
-  res.render('add-artwork', {
-    pageTitle: 'Add New Artwork',
-    data: req.body,
-    errors: errors.mapped()
-  })
-
   const data = matchedData(req)
   console.log('Sanitized:', data)
 
-  if(errors.mapped())
+  if(isEmpty(errors.mapped()))
     {
-      result = mysql.queryResult(`INSERT INTO ArtWork VALUES (${data.id},${data.year},"${data.name}","${data.artStyle}",${data.price},${data.artistId},${data.custId})`)
-      console.log(result)
-
-      if (!result)
+      var callback = (result) =>
       {
-        console.log('Key constraints violated');
+
+        console.log(`returned : ${JSON.stringify(result,undefined,2)}`)
+        // console.log(result == undefined)
+
+        if (result == undefined)
+        {
+          console.log('Key constraints violated');
+          res.redirect('/bad')
+        }
+        else {
+          res.redirect('/success');
+        }
       }
+      var result = mysql.queryResult(query,callback)
 
     }
+
+  else{
+
+    res.render('add-artwork', {
+      pageTitle: 'Add New Artwork',
+      data: req.body,
+      errors: errors.mapped()
+    })
+  }
+
 })
 
 
@@ -230,26 +314,38 @@ router.post('/add-element/artist', [
   .trim()
 ], (req, res) => {
   const errors = validationResult(req)
-  res.render('add-artist', {
-    pageTitle: 'Add New Artist',
-    data: req.body,
-    errors: errors.mapped()
-  })
-
   const data = matchedData(req)
   console.log('Sanitized:', data)
 
-  if(errors.mapped())
+  if(isEmpty(errors.mapped()))
     {
-      result = mysql.queryResult(`INSERT INTO Artist VALUES ("${data.name}","${data.birthPlace}",${data.age},"${data.artStyle}",${data.id})`)
-      console.log(result)
-
-      if (!result)
+      var callback = (result) =>
       {
-        console.log('Key constraints violated');
+
+        console.log(`returned : ${JSON.stringify(result,undefined,2)}`)
+        // console.log(result == undefined)
+
+        if (result == undefined)
+        {
+          console.log('Key constraints violated');
+          res.redirect('/bad')
+        }
+        else {
+          res.redirect('/success');
+        }
       }
+      var result = mysql.queryResult(`INSERT INTO Customer VALUES (${data.id},"${data.name}",0)`,callback)
 
     }
+
+  else{
+
+    res.render('add-artist', {
+      pageTitle: 'Add New Artist',
+      data: req.body,
+      errors: errors.mapped()
+    })
+  }
 
 })
 
@@ -278,18 +374,23 @@ router.post('/add-element/customer', [
 
   if(isEmpty(errors.mapped()))
     {
-      var result = mysql.queryResult(`INSERT INTO Customer VALUES (${data.id},"${data.name}",0)`)
-      console.log(result)
-      console.log(result == undefined)
-
-      if (result == undefined)
+      var callback = (result) =>
       {
-        console.log('Key constraints violated');
-        res.redirect('/bad')
+
+        console.log(`returned : ${JSON.stringify(result,undefined,2)}`)
+        // console.log(result == undefined)
+
+        if (result == undefined)
+        {
+          console.log('Key constraints violated');
+          res.redirect('/bad')
+        }
+        else {
+          res.redirect('/success');
+        }
       }
-      else {
-        res.redirect('/success');
-      }
+      var result = mysql.queryResult(`INSERT INTO Customer VALUES (${data.id},"${data.name}",0)`,callback)
+
     }
 
   else {
@@ -327,7 +428,7 @@ router.post('/transaction', [
 
   if(isEmpty(errors.mapped()))
     {
-      var result = mysql.queryResult(``)
+      var result = mysql.queryResult(`update ArtWork set owner=${data.custId} where artworkid=${data.artistId}`)
       console.log(result)
       console.log(result == undefined)
 
@@ -340,6 +441,27 @@ router.post('/transaction', [
         res.redirect('/success');
       }
     }
+
+    if(isEmpty(errors.mapped()))
+      {
+        var callback = (result) =>
+        {
+
+          console.log(`returned : ${JSON.stringify(result,undefined,2)}`)
+          // console.log(result == undefined)
+
+          if (result == undefined)
+          {
+            console.log('Key constraints violated');
+            res.redirect('/bad')
+          }
+          else {
+            res.redirect('/success');
+          }
+        }
+        var result = mysql.queryResult(`update ArtWork set owner=${data.custId} where artworkid=${data.artistId}`,callback)
+
+      }
 
   else {
 
