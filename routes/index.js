@@ -6,7 +6,7 @@ const { check, validationResult } = require('express-validator/check')
 const { matchedData } = require('express-validator/filter')
 const mysql = require('../database/mysql');
 const expect = require('expect')
-
+const sql = require('mysql')
 
 function isEmpty(obj) {
     for(var key in obj) {
@@ -39,22 +39,31 @@ router.post('/artists', [
 ], (req, res) => {
   const errors = validationResult(req)
 
-  const data = matchedData(req)
+  var data = matchedData(req)
   var query;
   console.log('Sanitized:', data)
-  if(data.name != '' && data.artStyle != ''){
-query = `select * from Artist where name = "${data.name}" and artStyle = "${data.artStyle}"`
+//   if(data.name != '' && data.artStyle != ''){
+// query = `select * from Artist where name = "${data.name}" and artStyle = "${data.artStyle}"`
+//   }
+//   else if( data.artStyle == '' && data.name != ''){
+// query = `select * from Artist where name = "${data.name}"`
+//   }
+//   else if(data.artStyle != '' && data.name == ''){
+// query = `select * from Artist where artStyle = "${data.artStyle}"`
+//   }
+//   else{
+// query = `select * from Artist`
+//   }
+  if(data.name === '')
+  {
+    data.name = null;
   }
-  else if( data.artStyle == '' && data.name != ''){
-query = `select * from Artist where name = "${data.name}"`
-  }
-  else if(data.artStyle != '' && data.name == ''){
-query = `select * from Artist where artStyle = "${data.artStyle}"`
-  }
-  else{
-query = `select * from Artist`
+  if(data.artStyle === '')
+  {
+    data.artStyle = null;
   }
 
+  query = sql.format("select * from Artist where (? is null or name = ?) and (? is null or artStyle = ?)",[data.name,data.name,data.artStyle,data.artStyle])
   if(isEmpty(errors.mapped()))
     {
       var callback = (result) =>
@@ -69,10 +78,16 @@ query = `select * from Artist`
           res.redirect('/bad')
         }
         else {
-          res.redirect('/success');
+          //res.redirect('/success');
+          res.render('displayartist',{
+            pageTitle: 'Display Artist Query Data',
+            result: result,
+            errors: errors.mapped()
+          })
         }
       }
       var result = mysql.queryResult(query,callback)
+      
 
     }
 
@@ -106,9 +121,22 @@ router.post('/artworks', [
 
 ], (req, res) => {
   const errors = validationResult(req)
-  const data = matchedData(req)
+  var data = matchedData(req)
   console.log('Sanitized:', data)
-
+  if(data.name === '')
+  {
+    data.name = null;
+  }
+  if(data.artistName === '')
+  {
+    data.artistName = null;
+  }
+  if(data.artStyle === '')
+  {
+    data.artStyle = null;
+  }
+  var arr = [data.name,data.name,data.artStyle,data.artStyle,data.artistName,data.artistName];
+  var query = sql.format("select title,artworkid,year,arttype,price,Artist.name as aname,Customer.name as owner from Artwork,Artist,Customer where (? is null or title = ?) and (owner = Customer.custid) and (Artwork.artistid = Artist.artistid) and (? is null or arttype = ?) and (? is null or Artwork.artistid in (select Artist.artistid from Artist where name = ?))",arr)
   if(isEmpty(errors.mapped()))
     {
       var callback = (result) =>
@@ -123,10 +151,16 @@ router.post('/artworks', [
           res.redirect('/bad')
         }
         else {
-          res.redirect('/success');
+          // res.redirect('/success');
+          res.render('displayartwork', {
+            pageTitle:'Display Art Work Query Data',
+            result: result,
+            errors: errors.mapped()
+          })
         }
       }
       var result = mysql.queryResult(query,callback)
+      
     }
 
   else{
@@ -154,16 +188,20 @@ router.post('/customers', [
   .trim()
 ], (req, res) => {
   const errors = validationResult(req)
-  const data = matchedData(req)
+  var data = matchedData(req)
   var query;
   console.log('Sanitized:', data)
-  if(data.name != ''){
-    query = `select * from Customer where name = "${data.name}"  `
+  // if(data.name != ''){
+  //   query = `select * from Customer where name = "${data.name}"  `
+  // }
+  // else{
+  //   query = `select * from Customer`
+  // }
+  if (data.name === '')
+  {
+    data.name = null;
   }
-  else{
-    query = `select * from Customer`
-  }
-
+  query = sql.format("select * from Customer where name = ?",[data.name]);
   if(isEmpty(errors.mapped()))
     {
       var callback = (result) =>
@@ -178,7 +216,12 @@ router.post('/customers', [
           res.redirect('/bad')
         }
         else {
-          res.redirect('/success');
+          // res.redirect('/success');
+          res.render('displaycustomer',{
+            pageTitle: 'View Customers',
+            result: result,
+            errors: errors.mapped()
+          })
         }
       }
       var result = mysql.queryResult(query,callback)
