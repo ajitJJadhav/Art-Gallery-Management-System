@@ -237,14 +237,7 @@ router.post('/add-element/artwork', [
   check('artistId')
   .isDecimal({ min:1 })
   .withMessage('ID is required')
-  .trim(),
-  check('custId')
-  .trim(),
-  check('artStyle')
-  .isLength({ min: 1 })
-  .withMessage('Artstyle is required')
   .trim()
-
 ], (req, res) => {
   const errors = validationResult(req)
   const data = matchedData(req)

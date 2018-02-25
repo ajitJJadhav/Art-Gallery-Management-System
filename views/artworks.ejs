@@ -44,13 +44,6 @@
       <div class="error"><%= errors.artistName.msg %></div>
     <% } %>
   </div>
-  <div class="form-field <%= errors.custName ? 'form-field-invalid' : '' %>">
-    <label for="custName">custName</label>
-    <textarea class="input" id="custName" name="custName" rows="1" autofocus><%= data.custName %></textarea>
-    <% if (errors.custName) { %>
-      <div class="error"><%= errors.custName.msg %></div>
-    <% } %>
-  </div>
   <div class="form-actions">
     <button class="btn" type="submit">Send</button>
   </div>
